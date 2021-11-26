@@ -5,8 +5,16 @@ import com.example.domain.models.repositories.ShopListRepository
 import com.example.domain.utils.UNDEFINED_ID
 
 object ShopListRepositoryImpl : ShopListRepository {
+
     private val shopList = mutableListOf<ShopItem>()
     private var autoIncrementId = 0
+
+    init {
+        for (i in 0 until 10) {
+            val shopItem = ShopItem("Name $i", i, true)
+            addShopItem(shopItem)
+        }
+    }
 
 
     override fun addShopItem(shopItem: ShopItem) {
