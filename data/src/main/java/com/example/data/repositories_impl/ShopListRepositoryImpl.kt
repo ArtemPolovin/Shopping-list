@@ -3,15 +3,21 @@ package com.example.data.repositories_impl
 import com.example.domain.models.ShopItem
 import com.example.domain.models.repositories.ShopListRepository
 import com.example.domain.utils.UNDEFINED_ID
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.flowWith
+import kotlin.random.Random
 
 object ShopListRepositoryImpl : ShopListRepository {
 
-    private val shopList = mutableListOf<ShopItem>()
+    private val shopList = sortedSetOf<ShopItem>({o1,o2 -> o1.id.compareTo(o2.id)})
     private var autoIncrementId = 0
 
     init {
-        for (i in 0 until 10) {
-            val shopItem = ShopItem("Name $i", i, true)
+        for (i in 0 until 30) {
+            val shopItem = ShopItem("Name $i", i, Random.nextBoolean())
             addShopItem(shopItem)
         }
     }
@@ -34,7 +40,14 @@ object ShopListRepositoryImpl : ShopListRepository {
         addShopItem(shopItem)
     }
 
-    override fun getShopList(): List<ShopItem> {
+    /*override suspend fun getShopList(): Flow<List<ShopItem>> {
+        return flow{
+           emit(shopList)
+            println("mLog: finished flow")
+        }.flowOn(Dispatchers.Default)
+    }*/
+
+    override  fun getShopList(): List<ShopItem> {
         return shopList.toList()
     }
 
