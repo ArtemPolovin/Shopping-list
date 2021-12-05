@@ -1,5 +1,6 @@
 package com.example.shoppinglist.ui.main
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -7,9 +8,9 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.shoppinglist.R
 import com.example.shoppinglist.ui.main.recyclerview.ShopListAdapter
-import com.example.shoppinglist.utils.DISABLED_SHOP_ITEM
-import com.example.shoppinglist.utils.ENABLED_SHOP_ITEM
-import com.example.shoppinglist.utils.MAX_POOL_SIZE_SHOP_LIST_ADAPTER
+import com.example.shoppinglist.ui.shop_item.ShopItemActivity
+import com.example.shoppinglist.utils.*
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class MainActivity : AppCompatActivity() {
 
@@ -22,7 +23,12 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         viewModel = ViewModelProvider(this)[MainViewModel::class.java]
-        viewModel.getShopList()
+
+        val buttonAddItem = findViewById<FloatingActionButton>(R.id.button_add_shop_item)
+        buttonAddItem.setOnClickListener {
+            val intent = ShopItemActivity.newIntentAddItem(this)
+            startActivity(intent)
+        }
 
         setupRecyclerView()
         getShopList()
@@ -81,8 +87,14 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupClickListener() {
         mAdapter.onShopItemClickListener = {
-            println("mLog: name = ${it.name}, count = ${it.count}")
+            val intent = ShopItemActivity.newIntentEditItem(this, it.id)
+            startActivity(intent)
         }
+    }
+
+    override fun onResume() {
+        viewModel.getShopList()
+        super.onResume()
     }
 
 

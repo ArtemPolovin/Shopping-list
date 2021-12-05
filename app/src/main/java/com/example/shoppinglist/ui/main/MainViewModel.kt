@@ -3,12 +3,15 @@ package com.example.shoppinglist.ui.main
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.data.repositories_impl.ShopListRepositoryImpl
 import com.example.domain.models.ShopItem
 import com.example.domain.usecases.shope_items_list_usecases.DeleteShopItemUseCase
 import com.example.domain.usecases.shope_items_list_usecases.EditShopItemUseCase
 import com.example.domain.usecases.shope_items_list_usecases.GetShopItemByIdUseCase
 import com.example.domain.usecases.shope_items_list_usecases.GetShopListUseCase
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 class MainViewModel : ViewModel() {
 
@@ -26,6 +29,12 @@ class MainViewModel : ViewModel() {
     val shopItem: LiveData<ShopItem> get() = _shopItem
 
     fun getShopList() {
+   /*     viewModelScope.launch {
+            getShpListUseCase.getShopList().collect {
+                _shopList.value = it
+            }
+        }*/
+
         _shopList.value = getShpListUseCase.getShopList()
     }
 
@@ -37,10 +46,6 @@ class MainViewModel : ViewModel() {
 
     fun getShopItemById(shopItemId: Int) {
         _shopItem.value = getShopItemByIdUseCase.getShopItemById(shopItemId)
-    }
-
-    fun editShopItem(shopItem: ShopItem) {
-        editShopItemUseCase.editShopItem(shopItem)
     }
 
     fun changeEnabledState(shopItem: ShopItem) {

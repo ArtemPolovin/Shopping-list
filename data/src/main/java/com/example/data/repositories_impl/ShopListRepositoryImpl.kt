@@ -34,15 +34,15 @@ object ShopListRepositoryImpl : ShopListRepository {
         shopList.remove(shopItem)
     }
 
-    override fun editShopItem(shopItem: ShopItem) {
+    override  fun editShopItem(shopItem: ShopItem) {
         val oldShopItem = getShopItemById(shopItem.id)
         shopList.remove(oldShopItem)
         addShopItem(shopItem)
     }
 
-    /*override suspend fun getShopList(): Flow<List<ShopItem>> {
+  /*  override suspend fun getShopList(): Flow<List<ShopItem>> {
         return flow{
-           emit(shopList)
+           emit(shopList.toList())
             println("mLog: finished flow")
         }.flowOn(Dispatchers.Default)
     }*/
